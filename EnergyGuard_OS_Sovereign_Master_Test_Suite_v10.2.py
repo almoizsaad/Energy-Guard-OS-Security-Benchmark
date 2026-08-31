@@ -61,18 +61,18 @@ logger = logging.getLogger(__name__)
 
 class Config:
     """Central system configuration"""
-    API_URL = "http://ebmsovereign.com/v1/process_batch"
+    API_URL = "http://localhost:7860/v1/process_batch"
 
     # Performance settings optimized for AsyncIO
-    CONCURRENT_USERS = 20
-    HIGH_LOAD_USERS = 100
-    REQUEST_TIMEOUT = 90
+    CONCURRENT_USERS = 10
+    HIGH_LOAD_USERS = 50
+    REQUEST_TIMEOUT = 300
     MAX_RETRIES = 5
-    RETRY_DELAY = 3
+    RETRY_DELAY = 5
 
     # Optimized Connection Pool settings
-    POOL_CONNECTIONS = 2000
-    POOL_MAXSIZE = 20000
+    POOL_CONNECTIONS = 1000
+    POOL_MAXSIZE = 5000
 
     # Report settings
     OUTPUT_DIR = "test_results"
@@ -1323,7 +1323,8 @@ class APITester:
             )
             timeout = aiohttp.ClientTimeout(total=Config.REQUEST_TIMEOUT)
             headers = {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-API-Key": "eyJkYXRhIjogImV5SmpkWE4wYjIxbGNsOXBaQ0k2SUNKbGRtRnNkV0YwYjNJaUxDQWlkR2xsY2lJNklDSmxiblJsY25CeWFYTmxJaXdnSW1WNGNHbHllU0k2SUNJeU1ETXdMVEV5TFRNeElpd2dJblI1Y0dVaU9pQWliR2xqWlc1elpTSXNJQ0pqYjIxd1lXNTVYMjVoYldVaU9pQWlTVzVrWlhCbGJtUmxiblFnUVhWa2FYUnZjaUlzSUNKdFlYaGZhVzV6ZEdGdVkyVnpJam9nTVRCOSIsICJzaWduYXR1cmUiOiAidldOTDNiNlhtbnBsU3BzQmszUUdOZGxBYkxUYXVCNWQwenhad3J5UXMvblBlY2pHbWorSkYzKzlMT3N1citLZDdrUlMrSVJ5MGx3QkRCRmlReEoxQmc9PSJ9"
             }
             self._session = aiohttp.ClientSession(
                 connector=connector,
@@ -1537,7 +1538,7 @@ class APITester:
 
     async def run_batch_test(self, test_cases: List[TestCase]):
         """Main engine processing all cases using Batch API"""
-        batch_size = 7000
+        batch_size = 100
         logger.info(f"🚀 Starting processing of {len(test_cases)} cases with Sovereign Batch System v10.2 (Async)...")
 
         start_time = time.time()
